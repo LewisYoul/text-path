@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title>Page Title</title>
+  
+  <link href='https://fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+
+  </head>
+  <body>
+  
+  <div class="container">
+    <svg id="svg" width="800" height="600"></svg>
+    <input id="svg-text" type="text" autofocus>
+  </div>
+  </body>
+</html>
+
+<script>
+  const defaultText = 'Change the text!';
+  const startPath = "M 100,400 A 100,100 0 0,1 700,400";
+  const endPath = "M 250,500 A 100,100 0 0,1 550,500";
+  const svg = d3.select("#svg")
+  const textInput = document.getElementById('svg-text');
+  const textPathId = "text-path";
+  const duration = 3000;
+
+  svg.append("path")
+      .attr("id", textPathId)
+      .attr("d", startPath)
+      .style("fill", "none")
+
+  const textPath = svg.append("text")
+    .append("textPath")
+    .attr("xlink:href", `#${textPathId}`)
+    .style("text-anchor","middle")
+    .attr("startOffset", "50%")
+    .text(defaultText)
+    .style('font-size', '50px')
+  
+  repeat();
+  
+  textInput.value = defaultText;
+  textInput.addEventListener('input', (e) => {
+    textPath.text(e.target.value)
+  });
+
+  function repeat() {
+    svg.selectAll("path")
+      .transition().duration(duration)
+      .attr("d", endPath)
+      .transition().duration(duration)
+      .attr("d", startPath)
+      .on('end', repeat)
+  };
+</script>
+
+<style>
+  html {
+    font-family: 'Arvo', serif;
+  }
+
+  input {
+    font-family: 'Arvo', serif;
+  }
+
+  .container {
+    width: 800px;
+    text-align: center;
+  }
+</style>
